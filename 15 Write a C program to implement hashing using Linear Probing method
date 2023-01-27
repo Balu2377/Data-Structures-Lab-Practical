@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define SIZE 10
+
+int hashTable[SIZE];
+bool occupied[SIZE];
+
+int hashFunction(int key) {
+    return key % SIZE;
+}
+
+void insert(int key) {
+    int index = hashFunction(key);
+    if (occupied[index] == false) {
+        hashTable[index] = key;
+        occupied[index] = true;
+    } else {
+        int i = (index + 1) % SIZE;
+        while (occupied[i] == true && i != index) {
+            i = (i + 1) % SIZE;
+        }
+        if (i == index) {
+            printf("Hash table is full!\n");
+        } else {
+            hashTable[i] = key;
+            occupied[i] = true;
+        }
+    }
+}
+
+int search(int key) {
+    int index = hashFunction(key);
+    if (hashTable[index] == key) {
+        return index;
+    } else {
+        int i = (index + 1) % SIZE;
+        while (hashTable[i] != key && occupied[i] == true && i != index) {
+            i = (i + 1) % SIZE;
+        }
+        if (i == index) {
+            printf("Key not found!\n");
+            return -1;
+        } else {
+            return i;
+        }
+    }
+}
+
+void delete(int key) {
+    int index = search(key);
+    if (index != -1) {
+        hashTable[index] = -1;
+        occupied[index] = false;
+    }
+}
+
+void display() {
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", hashTable[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    for (int i = 0; i < SIZE; i++) {
+        hashTable[i] = -1;
+        occupied[i] = false;
+    }
+
+    insert(12);
+    insert(25);
+    insert(35);
+    insert(26);
+    display();
+    delete(25);
+    display();
+    printf("Key 35 is at index: %d\n", search(35));
+    return 0;
+}

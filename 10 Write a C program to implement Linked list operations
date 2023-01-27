@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+void insertAtFront(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = head;
+    head = newNode;
+}
+
+void insertAtEnd(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    if (head == NULL) {
+        head = newNode;
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+void deleteNode(int data) {
+    struct Node* temp = head;
+    if (temp != NULL && temp->data == data) {
+        head = temp->next;
+        free(temp);
+        return;
+    }
+    while (temp != NULL && temp->data != data) {
+        temp = temp->next;
+    }
+    if (temp == NULL) {
+        printf("Node not found\n");
+        return;
+    }
+    struct Node* prev = head;
+    while (prev->next != temp) {
+        prev = prev->next;
+    }
+    prev->next = temp->next;
+    free(temp);
+}
+
+void printList() {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    insertAtFront(1);
+    insertAtFront(2);
+    insertAtEnd(3);
+    insertAtEnd(4);
+    printf("Linked List: ");
+    printList();
+    deleteNode(2);
+    printf("Linked List after deletion: ");
+    printList();
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+#define MAX_NODES 100
+
+int adj[MAX_NODES][MAX_NODES];
+int visited[MAX_NODES];
+int n;
+
+void dfs(int start) {
+    int i;
+    visited[start] = 1;
+    printf("%d ", start);
+    for (i = 0; i < n; i++) {
+        if (adj[start][i] == 1 && !visited[i]) {
+            dfs(i);
+        }
+    }
+}
+
+int main() {
+    int i, j, start;
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+    printf("Enter adjacency matrix:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &adj[i][j]);
+        }
+    }
+    printf("Enter starting node: ");
+    scanf("%d", &start);
+    dfs(start);
+    return 0;
+}

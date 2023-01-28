@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_VERTICES 100
+
+struct Graph {
+    int numVertices;
+    int adjMatrix[MAX_VERTICES][MAX_VERTICES];
+};
+
+void createGraph(struct Graph* G, int numVertices) {
+    int i, j;
+    G->numVertices = numVertices;
+
+    for (i = 0; i < G->numVertices; i++) {
+        for (j = 0; j < G->numVertices; j++) {
+            G->adjMatrix[i][j] = 0;
+        }
+    }
+}
+
+void addEdge(struct Graph* G, int src, int dest) {
+    G->adjMatrix[src][dest] = 1;
+    G->adjMatrix[dest][src] = 1;
+}
+
+void BFS(struct Graph* G, int startVertex) {
+    int i;
+    int queue[MAX_VERTICES];
+    int front = -1;
+    int rear = -1;
+
+    int visited[MAX_VERTICES];
+    for (i = 0; i < G->numVertices; i++) {
+        visited[i] = 0;
+    }
+
+    visited[startVertex] = 1;
+    queue[++rear] = startVertex;
+
+    while (front != rear) {
+        int currentVertex = queue[++front];
+        printf("%d ", currentVertex);
+
+        for (i = 0; i < G->numVertices; i++) {
+            if (G->adjMatrix[currentVertex][i] == 1 && !visited[i]) {
+                queue[++rear] = i;
+                visited[i] = 1;
+            }
+        }
+    }
+}
+
+int main() {
+    struct Graph G;
+    createGraph(&G, 4);
+    addEdge(&G, 0, 1);
+    addEdge(&G, 0, 2);
+    addEdge(&G, 1, 2);
+    addEdge(&G, 2, 0);
+    addEdge(&G, 2, 3);
+
+    printf("Breadth First Traversal (starting from vertex 2): ");
+    BFS(&G, 2);
+
+    return 0;
+}
